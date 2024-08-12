@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Taxa Shop|Главная</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+</head>
+<body class="d-flex h-100 text-center text-bg-dark">
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-dark" style="width: 280px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+      <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4 text-white bg-dark">Добро пожаловать</span>
+    </a>
+    <hr>
+    <form method="post" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+    {% csrf_token %}
+    <input type="search" class="form-control form-control-dark" placeholder="Поиск..."
+           aria-label="Search" name="search_product">
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+    <hr>
+    {% for c in categories %}
+    <ul class="nav nav-pills flex-column mb-2">
+      <li class="nav-item">
+        <a href="/category/{{ c.id }}" class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="1" height="1"><use xlink:href="/category/{{ c.id }}"></use></svg>
+            {{ c }}
+        </a>
+      </li>
+    </ul>
+    {% endfor %}
+    <hr>
+    {% if user.is_authenticated %}
+    <ul class="nav nav-pills flex-column mb-2">
+      <li class="nav-item">
+        <a href="/logout" class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="1" height="1"><use xlink:href="/logout"></use></svg>
+            Выйти
+        </a>
+      </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-2">
+        <li class="nav_item">
+            <a href="/cart" class="nav-link active" aria-current="page">
+                <svg class="bi pe-none me-2" width="1" height="1"><use xlink:href="cart"></use></svg>
+                Корзина
+            </a>
+        </li>
+    </ul>
+    {% else %}
+    <ul class="nav nav-pills flex-column mb-2">
+      <li class="nav-item">
+        <a href="/accounts/login" class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="1" height="1"><use xlink:href="/accounts/login"></use></svg>
+            Войти
+        </a>
+      </li>
+    </ul><ul class="nav nav-pills flex-column mb-2">
+      <li class="nav-item">
+        <a href="/register" class="nav-link active" aria-current="page">
+          <svg class="bi pe-none me-2" width="1" height="1"><use xlink:href="/register"></use></svg>
+            Регистрация
+        </a>
+      </li>
+    </ul>
+    {% endif %}
+</div>
+
+<div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom">Продукты</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        {% for p in products %}
+      <div class="feature col">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+            <img src="{{ p.pr_photo.url }}" alt="" class="img">
+        </div>
+        <h3 class="fs-2 text-whitelink bg-dark">{{ p.pr_name }}</h3>
+        <p>{{ p.pr_des }}</p>
+        <a href="/product/{{ p.id }}" class="icon-link">
+          Подробнее
+          <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+        </a>
+      </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
